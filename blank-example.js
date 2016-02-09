@@ -48,7 +48,7 @@ function init(){
                 id: "BC2-1",
                 name: "Blank Child Two",
                 data: {
-                    relation: "<h4>Candlebox</h4><b>Connections:</b><ul><li>Dave Krusen <div>(relation: member of band)</div></li></ul>"
+                    relation: "<h1>content here</h1><p>More content here</p>"
                 },
                 children: []
             }],
@@ -77,7 +77,7 @@ function init(){
             id: "236594_38",
             name: "blank-three",
             data: {
-                relation: "<h2>Independent Libraries</h2><p>Independent, privately-supported research libraries. Please hold criticism of these categories, this is really just for a demo.</p>"
+                relation: "<h1>content here</h1><p>More content here</p>"
             },
             children: [{
                 id: "BC3-1",
@@ -96,7 +96,7 @@ function init(){
             }]
         }, ],
         data: {
-            relation: "<h2>Philadelphia Area Consortium of Special Collections Libraries (PACSCL)</h2><p>The thirty-five member libraries and archives of the Philadelphia Area Consortium of Special Collections Libraries (PACSCL) collect, care for, and share with a world-wide audience collections that, in their depth and variety, comprise an internationally important body of unique materials for students, scholars and lifelong learners at any level. </p>"
+            relation: "<h1>content here</h1><p>More content here</p>"
         }
     };
     //end
