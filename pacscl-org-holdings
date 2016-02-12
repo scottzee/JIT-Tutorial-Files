@@ -1,0 +1,345 @@
+var labelType, useGradients, nativeTextSupport, animate;
+
+(function() {
+  var ua = navigator.userAgent,
+      iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
+      typeOfCanvas = typeof HTMLCanvasElement,
+      nativeCanvasSupport = (typeOfCanvas == 'object' || typeOfCanvas == 'function'),
+      textSupport = nativeCanvasSupport 
+        && (typeof document.createElement('canvas').getContext('2d').fillText == 'function');
+  //I'm setting this based on the fact that ExCanvas provides text support for IE
+  //and that as of today iPhone/iPad current text support is lame
+  labelType = (!nativeCanvasSupport || (textSupport && !iStuff))? 'Native' : 'HTML';
+  nativeTextSupport = labelType == 'Native';
+  useGradients = nativeCanvasSupport;
+  animate = !(iStuff || !nativeCanvasSupport);
+})();
+
+var Log = {
+  elem: false,
+  write: function(text){
+    if (!this.elem) 
+      this.elem = document.getElementById('log');
+    this.elem.innerHTML = text;
+    this.elem.style.left = (500 - this.elem.offsetWidth / 2) + 'px';
+  }
+};
+
+
+function init(){
+    //init data
+    var json = {
+        id: "190_0",
+        name: "PACSCL",
+        children: [{
+            id: "histSci",
+            name: "History of Science",
+            data: {
+                relation: "<h1>History of Science</h1><p>These nice folks claim to have stuff like this</p><ul><li>American Philosophical Society</li><li>University of Delaware</li><li>University of Penn</li><li>Chemical Heritage Foundation</li></ul>"
+            },
+            children: [{
+                id: "APS",
+                name: "American Philosophical Society",
+                data: {
+                    relation: "<h1>American Philosophical Society</h1>Founded by Benjamin Franklin in 1743, the Society houses one of the nation's principal collections in the history of science, anthropology, and early America. "
+                },
+                children: []
+            },{
+                id: "UDELL",
+                name: "University of Delaware",
+                data: {
+                    relation: "<h1>University of Delaware</h1>Books, manuscripts, and other materials from the fifteenth to the twenty-first century with particular strengths in the arts; English, Irish, and American literature; history and Delawareana; horticulture; and history of science and technology.  "
+                },
+                children: []
+            },{
+                id: "UPENN",
+                name: "University of Penn",
+                data: {
+                    relation: "<h1>University of Penn</h1>American, British, & Continental history, literature, & philosophy; medieval & Renaissance studies; Shakespeare; history of science & technology, esp. chemistry; cookery; book history & arts; local arts history; South Asia; Judaica. "
+                },
+                children: []
+            },{
+                id: "CHF",
+                name: "Chemical Heritage Foundation",
+                data: {
+                    relation: "<h1>Chemical Heritage Foundation</h1>CHF's collections represents centuries of the material culture of the chemistry and related sciences, technologies, and industries."
+                },
+                children: []
+            }],
+        }, {
+            id: "architecture",
+            name: "Architecture",
+            data: {
+                relation: "<h1>Architecture</h1><p>These nice folks claim to have stuff like this</p><ul><li>Athenaeum of Philadelphia</li><li>Winterthur Museum</li></ul>"
+            },
+            children: [{
+                id: "athenaeum",
+                name: "Athenaeum of Philadelphia",
+                data: {
+                    relation: "<h1>Athenaeum of Philadelphia</h1><p>Founded in 1814, the Athenaeum houses a nationally significant collection on architecture and design history. </p>"
+                },
+                children: []
+            },{
+                id: "winterthur",
+                name: "Winterthur Museum",
+                data: {
+                    relation: " <h1>Winterthur Museum</h1>American decorative arts and material culture. Includes architecture and design pattern books, trade catalogs, manuscripts, printed ephemera, Shaker Collection, Decorative Arts Photographic Collection. "
+                },
+                children: []
+            }]
+        }, {
+            id: "236594_38",
+            name: "Medieval and Renaissance",
+            data: {
+                relation: "<h1>Medieval and Renaissance</h1><p>These nice folks claim to have stuff like this</p><ul><li>Bryn Mawr College</li><li>University of Penn</li></ul>"
+            },
+            children: [{
+                id: "BrynMawr",
+                name: "Bryn Mawr College",
+                data: {
+                    relation: "<h1>Bryn Mawr College</h1>British and American literary history; European travel accounts to Africa, Asia and Latin America; Medieval and Renaissance manuscripts and books; women's history, especially suffrage; women writers and artists; history of London; art study collections; archaeological and ethnographic materials; decorative arts. "
+                },
+                children: []
+            },{
+                id: "UPENN",
+                name: "University of Penn",
+                data: {
+                    relation: "<h1>University of Penn</h1>American, British, & Continental history, literature, & philosophy; medieval & Renaissance studies; Shakespeare; history of science & technology, esp. chemistry; cookery; book history & arts; local arts history; South Asia; Judaica. "
+                },
+                children: []
+            }]
+        },{
+            id: "decorative_arts",
+            name: "Decorative Arts",
+            data: {
+                relation: "<h1>Decorative Arts</h1><p>These nice folks claim to have stuff like this</p><ul><li>Bryn Mawr College</li><li>Winterthur Museum</li></ul>"
+            },
+            children: [{
+                id: "BrynMawr",
+                name: "Bryn Mawr College",
+                data: {
+                    relation: "<h1>Bryn Mawr College</h1>British and American literary history; European travel accounts to Africa, Asia and Latin America; Medieval and Renaissance manuscripts and books; women's history, especially suffrage; women writers and artists; history of London; art study collections; archaeological and ethnographic materials; decorative arts. "
+                },
+                children: []
+            },{
+                id: "winterthur",
+                name: "Winterthur Museum",
+                data: {
+                    relation: "<h1>Winterthur Museum</h1> American decorative arts and material culture. Includes architecture and design pattern books, trade catalogs, manuscripts, printed ephemera, Shaker Collection, Decorative Arts Photographic Collection. "
+                },
+                children: []
+            }]
+        },{
+            id: "chemistry",
+            name: "Chemistry",
+            data: {
+                relation: "<h1>Chemistry</h1><p>These nice folks claim to have stuff like this</p><ul><li>Chemical Heritage Foundation</li><li>University of Penn</li></ul>"
+            },
+            children: [{
+                id: "CHF",
+                name: "Chemical Heritage Foundation",
+                data: {
+                    relation: "<h1>Chemical Heritage Foundation</h1>CHF's collections represents centuries of the material culture of the chemistry and related sciences, technologies, and industries."
+                },
+                children: []
+            },{
+                id: "UPENN",
+                name: "University of Penn",
+                data: {
+                    relation: "<h1>University of Penn</h1>American, British, & Continental history, literature, & philosophy; medieval & Renaissance studies; Shakespeare; history of science & technology, esp. chemistry; cookery; book history & arts; local arts history; South Asia; Judaica. "
+                },
+                children: []
+            }]
+        },{
+            id: "am-german",
+            name: "American-German Experience",
+            data: {
+                relation: "<h1>American-German Experience</h1><p>These nice folks claim to have stuff like this</p><ul><li>Franklin & Marshall College</li><li>German Society of Pennsylvania</li></ul>"
+            },
+            children: [{
+                id: "FrankMarshall",
+                name: "Franklin & Marshall College",
+                data: {
+                    relation: "<h1>Franklin & Marshall College</h1>Materials documenting Pennsylvania-German culture, the classics, the natural sciences, exploration, the United States Civil War, Benjamin Franklin, and the history of Franklin and Marshall College."
+                },
+                children: []
+            },{
+                id: "GSP",
+                name: "German Society of Pennsylvania",
+                data: {
+                    relation: "<h1>German Society of Pennsylvania</h1>Library and Archives. The library houses approximately 60,000 volumes; three-quarters are in German. The library's collections include the historic reading library of the German Society, with rare holdings in German and American history, literature and culture since the 18th century. Other special collections document German-American life in the United States since 1683, including books, pamphlets, manuscripts, and German-American newspapers and periodicals. "
+                },
+                children: []
+            }]
+        },{
+            id: "women",
+            name: "Women's Rights and History",
+            data: {
+                relation: "<h1>Women's Rights and History</h1><p>These nice folks claim to have stuff like this</p><ul>Haverford College<li></liSwarthmore College><li>Bryn Mawr College</li><li>Drexel University College of Medicine Legacy Center</li></ul>"
+            },
+            children: [{
+                id: "Haverford",
+                name: "Haverford College",
+                data: {
+                    relation: "<h1>Haverford College</h1>Quaker books and mss, 17th century to present, especially regarding Native Americans, civil rights and women's rights, Quakers in Japan; other rare books and manuscripts dating back to the 13th century; photographs and historic maps."
+                },
+                children: []
+            },{
+                id: "Swarthmore",
+                name: "Swarthmore College",
+                data: {
+                    relation: "<h1>Swarthmore College</h1>Quaker history, doctrine, and activity in various fields; Indian rights, women's rights, and abolition of slavery; the history of the peace movement. "
+                },
+                children: []
+            },{
+                id: "BrynMawr",
+                name: "Bryn Mawr College",
+                data: {
+                    relation: "<h1>Bryn Mawr College</h1>British and American literary history; European travel accounts to Africa, Asia and Latin America; Medieval and Renaissance manuscripts and books; women's history, especially suffrage; women writers and artists; history of London; art study collections; archaeological and ethnographic materials; decorative arts. "
+                },
+                children: []
+            },{
+                id: "DUCOM",
+                name: "Drexel University College of Medicine Legacy Center",
+                data: {
+                    relation: "<h1>Drexel University College of Medicine Legacy Center</h1>The Legacy Center: Archives and Special Collections on Women in Medicine and Homeopathy is the repository for records documenting the history of the College and its predecessor institutions including Woman's Medical College of Pennsylvania and Hahnemann University."
+                },
+                children: []
+            }]
+        },{
+            id: "rare_books",
+            name: "Rare Books",
+            data: {
+                relation: "<h1>Rare Books</h1><p>These nice folks claim to have stuff like this</p><ul><li>Library Company of Philadelphia</li><li>Lehigh University</li><li>Temple University</li><li>University of Penn</li><li>Free Library of Philadelphia</li></ul>"
+            },
+            children: [{
+                id: "LCP",
+                name: "Library Company of Philadelphia",
+                data: {
+                    relation: "<h1>Library Company of Philadelphia</h1>The Library Company of Philadelphia is an independent research library specializing in American history and culture from the 17th through the 19th centuries. Open to the public free of charge, the Library Company houses an extensive non-circulating collection of rare books, manuscripts, broadsides, ephemera, prints, photographs, and works of art. The mission of the Library Company is to preserve, interpret, make available, and augment the valuable materials within its care. We serve a diverse constituency throughout Philadelphia and nationally and internationally, offering comprehensive reader services, an internationally renowned fellowship program, online catalogs, and regular exhibitions and public programs. "
+                },
+                children: []
+            },{
+                id: "Lehigh",
+                name: "Lehigh University",
+                data: {
+                    relation: "<h1>Lehigh University</h1>Lehigh University's Special Collections holds a rare book collection of over 40,00 volumes, with first editions of English and American literature dating from the 17th to the 19th centuries."
+                },
+                children: []
+            },{
+                id: "Temple",
+                name: "Temple University",
+                data: {
+                    relation: "<h1>Temple University</h1>The Special Collections Research Center includes the Urban Archives, Philadelphia Jewish Archives collections, rare books and manuscripts, science fiction and fantasy, the Contemporary Culture Collection printing/publishing/bookselling records, the Philadelphia Dance Collection, and the University Archives (Templana Collection). "
+                },
+                children: []
+            },{
+                id: "UPENN",
+                name: "University of Penn",
+                data: {
+                    relation: "<h1>University of Penn</h1>American, British, & Continental history, literature, & philosophy; medieval & Renaissance studies; Shakespeare; history of science & technology, esp. chemistry; cookery; book history & arts; local arts history; South Asia; Judaica. "
+                },
+                children: []
+            },{
+                id: "FLP",
+                name: "Free Library of Philadelphia",
+                data: {
+                    relation: "<h1>Free Library of Philadelphia</h1>Collections include illuminated manuscripts, Americana, common law, children's literature and illustrations, and Pennsylvania German Fraktur. The Central Library houses special collections in other departments; consult website. "
+                },
+                children: []
+            }]
+        } ],
+        data: {
+            relation: "<h1>content here</h1><p>More content here</p>"
+        }
+    };
+    //end
+    
+    //init RGraph
+    var rgraph = new $jit.RGraph({
+        //Where to append the visualization
+        injectInto: 'infovis',
+        //Optional: create a background canvas that plots
+        //concentric circles.
+        background: {
+          CanvasStyles: {
+            strokeStyle: '#555'
+          }
+        },
+        //Add navigation capabilities:
+        //zooming by scrolling and panning.
+        Navigation: {
+          enable: true,
+          panning: true,
+          zooming: 10
+        },
+        //Set Node and Edge styles.
+        Node: {
+            color: '#ddeeff'
+        },
+        
+        Edge: {
+          color: '#C17878',
+          lineWidth:1.5
+        },
+
+        onBeforeCompute: function(node){
+            Log.write("centering " + node.name + "...");
+            //Add the relation list in the right column.
+            //This list is taken from the data property of each JSON node.
+            $jit.id('inner-details').innerHTML = node.data.relation;
+        },
+        
+        //Add the name of the node in the correponding label
+        //and a click handler to move the graph.
+        //This method is called once, on label creation.
+        onCreateLabel: function(domElement, node){
+            domElement.innerHTML = node.name;
+            domElement.onclick = function(){
+                rgraph.onClick(node.id, {
+                    onComplete: function() {
+                        Log.write("done");
+                    }
+                });
+            };
+        },
+        //Change some label dom properties.
+        //This method is called each time a label is plotted.
+        onPlaceLabel: function(domElement, node){
+            var style = domElement.style;
+            style.display = '';
+            style.cursor = 'pointer';
+
+            if (node._depth <= 1) {
+                style.fontSize = "0.8em";
+                style.color = "#ccc";
+            
+            } else if(node._depth == 2){
+                style.fontSize = "0.7em";
+                style.color = "#494949";
+            
+            } else {
+                style.display = 'none';
+            }
+
+            var left = parseInt(style.left);
+            var w = domElement.offsetWidth;
+            style.left = (left - w / 2) + 'px';
+        }
+    });
+    //load JSON data
+    rgraph.loadJSON(json);
+    //trigger small animation
+    rgraph.graph.eachNode(function(n) {
+      var pos = n.getPos();
+      pos.setc(-200, -200);
+    });
+    rgraph.compute('end');
+    rgraph.fx.animate({
+      modes:['polar'],
+      duration: 2000
+    });
+    //end
+    //append information about the root relations in the right column
+    $jit.id('inner-details').innerHTML = rgraph.graph.getNode(rgraph.root).data.relation;
+}
