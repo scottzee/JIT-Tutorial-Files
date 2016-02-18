@@ -46,7 +46,7 @@ function init(){
                 children: []
             },{
                 id: "public-two",
-                name: "example one",
+                name: "example two",
                 data: {
                     relation: "<h4>Candlebox</h4><b>Connections:</b><ul><li>Dave Krusen <div>(relation: member of band)</div></li></ul>"
                 },
