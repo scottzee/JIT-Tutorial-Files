@@ -41,14 +41,14 @@ function init(){
                 id: "public-one",
                 name: "example one",
                 data: {
-                    relation: "<h4>Candlebox</h4><b>Connections:</b><ul><li>Dave Krusen <div>(relation: member of band)</div></li></ul>"
+                    relation: "<h2></h2>"
                 },
                 children: []
             },{
                 id: "public-two",
                 name: "example two",
                 data: {
-                    relation: "<h4>Candlebox</h4><b>Connections:</b><ul><li>Dave Krusen <div>(relation: member of band)</div></li></ul>"
+                    relation: "<h2></h2>"
                 },
                 children: []
             }],
